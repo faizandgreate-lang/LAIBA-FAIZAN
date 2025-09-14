@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Laiba & Faizan Journey</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #d63384;
+    }
+    .counter {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      width: 500px;
+    }
+    .time, .totalDays {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #495057;
+    }
+    span {
+      font-weight: bold;
+      color: #0d6efd;
+    }
+  </style>
+</head>
+<body>
+  <h1>💖 Laiba & Faizan Journey 💖</h1>
+
+  <div class="counter">
+    <h2>Since They Met (8 May 2025)</h2>
+    <div id="metTime" class="time"></div>
+    <div id="metTotalDays" class="totalDays"></div>
+  </div>
+
+  <div class="counter">
+    <h2>Since They Started Talking (13 May 2025 1:44 PM IST)</h2>
+    <div id="talkTime" class="time"></div>
+    <div id="talkTotalDays" class="totalDays"></div>
+  </div>
+
+  <script>
+    function updateCounter(startDate, timeElementId, totalDaysElementId) {
+      const now = new Date();
+      let diff = now - startDate;
+
+      let seconds = Math.floor(diff / 1000);
+      let minutes = Math.floor(seconds / 60);
+      let hours = Math.floor(minutes / 60);
+      let days = Math.floor(hours / 24);
+
+      let years = Math.floor(days / 365);
+      let months = Math.floor((days % 365) / 30);
+      let remainingDays = days - (years * 365) - (months * 30);
+
+      hours = hours % 24;
+      minutes = minutes % 60;
+      seconds = seconds % 60;
+
+      document.getElementById(timeElementId).innerHTML =
+        `<span>${years}</span> Years, 
+         <span>${months}</span> Months, 
+         <span>${remainingDays}</span> Days, 
+         <span>${hours}</span> Hours, 
+         <span>${minutes}</span> Minutes, 
+         <span>${seconds}</span> Seconds`;
+
+      document.getElementById(totalDaysElementId).innerHTML =
+        `<span>${days}</span> Total Days`;
+    }
+
+    function runTimers() {
+      // Since they met: 8 May 2025
+      updateCounter(new Date("2025-05-08T00:00:00"), "metTime", "metTotalDays");
+
+      // Since they started talking: 13 May 2025 1:44 PM IST (UTC+5:30)
+      updateCounter(new Date("2025-05-13T13:44:00+05:30"), "talkTime", "talkTotalDays");
+    }
+
+    setInterval(runTimers, 1000);
+    runTimers();
+  </script>
+</body>
+</html>
