@@ -1,93 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Laiba & Faizan Journey</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      color: #333;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      color: #d63384;
-    }
-    .counter {
-      background: white;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      width: 500px;
-    }
-    .time, .totalDays {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #495057;
-    }
-    span {
-      font-weight: bold;
-      color: #0d6efd;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>💖 Laiba & Faizan Journey 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #ffe6f0, #ffe0b3);
+    color: #333;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    color: #d63384;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .counter {
+    background: rgba(255, 255, 255, 0.95);
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 8px 15px rgba(0,0,0,0.1);
+    max-width: 90%;
+    transition: transform 0.3s;
+    position: relative;
+    z-index: 1;
+  }
+
+  .counter:hover {
+    transform: scale(1.03);
+  }
+
+  h2 {
+    color: #d63384;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+  }
+
+  .time, .totalDays {
+    font-size: 1.1em;
+    margin-top: 10px;
+    color: #495057;
+  }
+
+  span {
+    font-weight: bold;
+    color: #0d6efd;
+  }
+
+  /* Analog clock */
+  .clock-container {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 300px;
+    aspect-ratio: 1;
+    border: 10px solid #d63384;
+    border-radius: 50%;
+    background: white;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+
+  .hand {
+    width: 50%;
+    height: 4px;
+    background: #0d6efd;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0% 50%;
+    transform: rotate(0deg);
+    border-radius: 4px;
+  }
+
+  .hour {
+    height: 6px;
+    background: #d63384;
+  }
+
+  .minute {
+    height: 4px;
+    background: #0d6efd;
+  }
+
+  .second {
+    height: 2px;
+    background: #ffa500;
+  }
+
+  .center-dot {
+    width: 12px;
+    height: 12px;
+    background: #d63384;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+
+  .digital-clock {
+    font-size: 1.3em;
+    margin-top: 15px;
+    color: #d63384;
+    font-weight: bold;
+  }
+
+  /* Floating hearts */
+  @keyframes floatHeart {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-700px) rotate(360deg); opacity: 0; }
+  }
+
+  .heart {
+    position: absolute;
+    color: #ff4da6;
+    animation: floatHeart linear forwards;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
 </head>
 <body>
-  <h1>💖 Laiba & Faizan Journey 💖</h1>
 
-  <div class="counter">
-    <h2>Since They Met (8 May 2025)</h2>
-    <div id="metTime" class="time"></div>
-    <div id="metTotalDays" class="totalDays"></div>
+<h1>💖 Laiba & Faizan Journey 💖</h1>
+
+<div class="counter">
+  <h2>Since They Met (8 May 2025)</h2>
+  <div id="metTime" class="time"></div>
+  <div id="metTotalDays" class="totalDays"></div>
+</div>
+
+<div class="counter">
+  <h2>Since They Started Talking (13 May 2025 1:44 PM IST)</h2>
+  <div id="talkTime" class="time"></div>
+  <div id="talkTotalDays" class="totalDays"></div>
+</div>
+
+<div class="counter">
+  <h2>Current Time</h2>
+  <div class="clock-container">
+    <div class="hand hour" id="hourHand"></div>
+    <div class="hand minute" id="minuteHand"></div>
+    <div class="hand second" id="secondHand"></div>
+    <div class="center-dot"></div>
   </div>
+  <div id="digitalClock" class="digital-clock"></div>
+</div>
 
-  <div class="counter">
-    <h2>Since They Started Talking (13 May 2025 1:44 PM IST)</h2>
-    <div id="talkTime" class="time"></div>
-    <div id="talkTotalDays" class="totalDays"></div>
-  </div>
+<script>
+  // Countdown counters
+  function updateCounter(startDate, timeElementId, totalDaysElementId) {
+    const now = new Date();
+    let diff = now - startDate;
 
-  <script>
-    function updateCounter(startDate, timeElementId, totalDaysElementId) {
-      const now = new Date();
-      let diff = now - startDate;
+    let seconds = Math.floor(diff / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
 
-      let seconds = Math.floor(diff / 1000);
-      let minutes = Math.floor(seconds / 60);
-      let hours = Math.floor(minutes / 60);
-      let days = Math.floor(hours / 24);
+    let years = Math.floor(days / 365);
+    let months = Math.floor((days % 365) / 30);
+    let remainingDays = days - (years * 365) - (months * 30);
 
-      let years = Math.floor(days / 365);
-      let months = Math.floor((days % 365) / 30);
-      let remainingDays = days - (years * 365) - (months * 30);
+    hours = hours % 24;
+    minutes = minutes % 60;
+    seconds = seconds % 60;
 
-      hours = hours % 24;
-      minutes = minutes % 60;
-      seconds = seconds % 60;
+    document.getElementById(timeElementId).innerHTML =
+      `<span>${years}</span> Years, 
+       <span>${months}</span> Months, 
+       <span>${remainingDays}</span> Days, 
+       <span>${hours}</span> Hours, 
+       <span>${minutes}</span> Minutes, 
+       <span>${seconds}</span> Seconds`;
 
-      document.getElementById(timeElementId).innerHTML =
-        `<span>${years}</span> Years, 
-         <span>${months}</span> Months, 
-         <span>${remainingDays}</span> Days, 
-         <span>${hours}</span> Hours, 
-         <span>${minutes}</span> Minutes, 
-         <span>${seconds}</span> Seconds`;
+    document.getElementById(totalDaysElementId).innerHTML =
+      `<span>${days}</span> Total Days`;
+  }
 
-      document.getElementById(totalDaysElementId).innerHTML =
-        `<span>${days}</span> Total Days`;
-    }
+  setInterval(() => {
+    updateCounter(new Date("2025-05-08T00:00:00"), "metTime", "metTotalDays");
+    updateCounter(new Date("2025-05-13T13:44:00+05:30"), "talkTime", "talkTotalDays");
+  }, 1000);
 
-    function runTimers() {
-      // Since they met: 8 May 2025
-      updateCounter(new Date("2025-05-08T00:00:00"), "metTime", "metTotalDays");
+  // Analog & digital clock
+  function updateClock() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
 
-      // Since they started talking: 13 May 2025 1:44 PM IST (UTC+5:30)
-      updateCounter(new Date("2025-05-13T13:44:00+05:30"), "talkTime", "talkTotalDays");
-    }
+    const hourDeg = (hours % 12) * 30 + (minutes / 60) * 30;
+    const minuteDeg = minutes * 6 + (seconds / 60) * 6;
+    const secondDeg = seconds * 6;
 
-    setInterval(runTimers, 1000);
-    runTimers();
-  </script>
+    document.getElementById("hourHand").style.transform = `rotate(${hourDeg}deg)`;
+    document.getElementById("minuteHand").style.transform = `rotate(${minuteDeg}deg)`;
+    document.getElementById("secondHand").style.transform = `rotate(${secondDeg}deg)`;
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const displayHours = hours % 12 || 12;
+    document.getElementById("digitalClock").innerText =
+      `${displayHours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} ${ampm}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Floating hearts
+  function createHearts() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerText = '💖';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = (15 + Math.random() * 25) + 'px';
+    heart.style.animationDuration = (4 + Math.random() * 4) + 's';
+    document.body.appendChild(heart);
+    heart.addEventListener('animationend', () => heart.remove());
+  }
+  setInterval(createHearts, 300);
+</script>
+
 </body>
 </html>
